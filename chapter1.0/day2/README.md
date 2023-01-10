@@ -40,7 +40,7 @@ pub contract ExampleNFT {
 
     pub resource NFT {
         pub let id: UInt64
-    
+
         init() {
             self.id = self.uuid
             ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
@@ -68,7 +68,7 @@ pub contract ExampleNFT {
         pub fun getIDs(): [UInt64] {
             return self.ownedNFTs.keys
         }
- 
+
         pub fun borrowRecordNFT(id: UInt64): &NFT? {
             return &self.ownedNFTs[id] as &NFT?
         }
@@ -154,7 +154,7 @@ pub contract ExampleNFT {
 
     pub resource NFT {
         pub let id: UInt64
-    
+
         init() {
             self.id = self.uuid
             ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
@@ -182,7 +182,7 @@ pub contract ExampleNFT {
         pub fun getIDs(): [UInt64] {
             return self.ownedNFTs.keys
         }
- 
+
         pub fun borrowRecordNFT(id: UInt64): &NFT? {
             return &self.ownedNFTs[id] as &NFT?
         }
@@ -248,7 +248,7 @@ pub contract ExampleNFT {
 
 We introduced a new `@MinterProxy` resource and a public function to create a new `@MinterProxy` resource. You may be wondering, "Jacob. What the heck... why can anyone create an `@MinterProxy` resource now. That seems so weird." Yeah, you're right, it is weird, and so are you.
 
-Anyone can create a `@MinterProxy` resource. But they won't necesarrily be able to utilize it the way they want. Initially, the `@MinterProxy` resource's `minter` capability is set to `nil`. However this variable has the ability to be filled with a legitimate `Capability<&NFTMinter>` if the NFTMinter calls the `depositMinter` function and gives them it. While it is true that anyone can call this function, you must pass in a valid `Capability<&NFTMinter>` type or the function will fail due to the pre-condition in the interface. 
+Anyone can create a `@MinterProxy` resource. But they won't necesarrily be able to utilize it the way they want. Initially, the `@MinterProxy` resource's `minter` capability is set to `nil`. However this variable has the ability to be filled with a legitimate `Capability<&NFTMinter>` if the NFTMinter calls the `depositMinter` function and gives them it. While it is true that anyone can call this function, you must pass in a valid `Capability<&NFTMinter>` type or the function will fail due to the pre-condition in the interface.
 
 First, lets write a transaction for a random user to store a `@MinterProxy`:
 
@@ -264,7 +264,7 @@ transaction() {
 }
 ```
 
-Now, the NFTMinter account must fulfill the `@MinterProxy` with a capability if they want to give them minting rights. The question now is, do we want this capability to be private or public? Well, private of course! If the NFTMinter created a public capability to their resource, then anyone could mint! 
+Now, the NFTMinter account must fulfill the `@MinterProxy` with a capability if they want to give them minting rights. The question now is, do we want this capability to be private or public? Well, private of course! If the NFTMinter created a public capability to their resource, then anyone could mint!
 
 Let's see how to create a private capability (it's very similar to public) and deposit it to the `@MinterProxy`:
 
@@ -304,7 +304,7 @@ transaction() {
     // Get the capability
     let minterCapability: Capability<&ExampleNFT.NFTMinter> = minterProxy.minter ?? panic("The capability has not been fulfilled.")
     // Borrow the capability
-    let minter = &ExampleNFT.NFTMinter = minterCapability.borrow() ?? panic("The capability is no longer valid.")
+    let minter : &ExampleNFT.NFTMinter = minterCapability.borrow() ?? panic("The capability is no longer valid.")
 
     // Mint the NFT
     let nft: @NFT <- minter.mintNFT()
